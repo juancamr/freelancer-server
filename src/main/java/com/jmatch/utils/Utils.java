@@ -1,8 +1,8 @@
 package com.jmatch.utils;
 
 import com.jmatch.config.EmailSender;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.mindrot.jbcrypt.BCrypt;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+    private static final Dotenv dotenv = Dotenv.load();
 
     public static String encryptPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
@@ -29,13 +30,13 @@ public class Utils {
         return Pattern.compile(EMAIL_REGEX).matcher(email).matches();
     }
 
-    public static <T> boolean checkRequestParams(T objeto) {
-        Field[] fields = objeto.getClass().getDeclaredFields();
+    public static <T> boolean checkRequestParams(T object) {
+        Field[] fields = object.getClass().getDeclaredFields();
         List<Object> params = new ArrayList<>();
         for (Field field : fields) {
-            field.setAccessible(true); //importantisimo xd
+            field.setAccessible(true);
             try {
-                params.add(field.get(objeto));
+                params.add(field.get(object));
             } catch (IllegalAccessException e) {
                 params.add(null);
                 System.out.println(e);
@@ -52,7 +53,7 @@ public class Utils {
         try {
             Session session = EmailSender.getSession();
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("jcmrojas29@gmail.comxd"));
+            message.setFrom(new InternetAddress(dotenv.get("MY_PERSONAL_EMAIL")));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
             message.setSubject(titulo);
             message.setText(textMessage);
