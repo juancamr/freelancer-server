@@ -25,14 +25,15 @@ CREATE TABLE
 CREATE TABLE
     if NOT EXISTS freelancer (
         id INT PRIMARY key NOT NULL AUTO_INCREMENT,
+        username varchar(30) not null,
         id_categoria INT NOT NULL,
         nombre VARCHAR(50) NOT NULL,
         apellido VARCHAR(50) NOT NULL,
-        foto VARCHAR(200) NOT NULL,
+        foto VARCHAR(200),
         descripcion TEXT,
         correo VARCHAR(50) NOT NULL,
         passwd VARCHAR(80) NOT NULL,
-        telefono VARCHAR(20) NOT NULL,
+        telefono VARCHAR(20),
         CONSTRAINT UNIQUE (correo),
         CONSTRAINT FOREIGN key (id_categoria) REFERENCES categoria (id)
     ) ENGINE = INNODB;
