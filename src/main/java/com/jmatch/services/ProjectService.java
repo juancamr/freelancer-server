@@ -1,24 +1,80 @@
 package com.jmatch.services;
 
+import com.jmatch.interfaces.ProjectRelated;
 import com.jmatch.models.Project;
 import com.jmatch.models.Response;
 import com.jmatch.repositories.ProjectRepository;
+import com.jmatch.requestModel.ProjectRegisterRequest;
+import com.jmatch.requestModel.UpdateProjectRequest;
+import com.jmatch.utils.Const;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 public class ProjectService extends BaseService<Project> {
 
-    //@Autowired private ProjectRepository projectRepository;
+  @Autowired private ProjectRepository projectRepository;
 
-    public ArrayList<Project> fillAllProjects() {
-        ArrayList<Project> projects = new ArrayList<Project>();
-        for (int i=0; i<10; i++){
-            Project p = new Project.Builder().id(i).image("cdcds").projectname("cds").build();
-            projects.add(p);
-        }
-        return projects;
+  public List<Project> getProjects() {
+    return projectRepository.findAll();
+  }
+
+  public Response<Project> getProjectById(int id) {
+
+    Optional<Project> f = projectRepository.findById(id);
+
+    if (f.isEmpty()) {
+      return res(false, null);
     }
+
+    Project project = f.get();
+    return res(true, project);
+  }
+
+  public Response<Project> addProjectService(ProjectRegisterRequest data) {
+
+    ProjectRelated savedProject =
+        projectRepository.save(
+            new Project.Builder().projectname(data.getName()).image(data.getImage()).build());
+
+    if (savedProject.getId() == 0) {
+      return res(false, Const.Errors.SOMETHING_WENT_WRONG);
+    }
+
+    return res(true, savedProject);
+  }
+
+  public Response<Project> updateProjectService(long id, UpdateProjectRequest request) {
+
+    Optional<Project> f = projectRepository.findById(id);
+
+    if (f.isEmpty()) {
+      return res(false, null);
+    }
+
+    Project project = f.get();
+    project.setImage(request.getImage());
+    project.setProjectname(request.getName());
+
+    ProjectRelated savedProject = projectRepository.save(project);
+
+    return res(true, savedProject);
+  }
+
+  public Boolean deleteProjectService(long id) {
+
+    Optional<Project> f = projectRepository.findById(id);
+
+    if (f.isEmpty()) {
+      return false;
+    }
+
+    Project project = f.get();
+
+    projectRepository.delete(project);
+
+    return true;
+  }
 }

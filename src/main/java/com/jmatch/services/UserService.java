@@ -1,6 +1,7 @@
 package com.jmatch.services;
 
 import com.jmatch.interfaces.UserRelated;
+import com.jmatch.models.Project;
 import com.jmatch.models.Response;
 import com.jmatch.models.User;
 import com.jmatch.repositories.UserRepository;

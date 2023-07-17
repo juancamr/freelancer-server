@@ -1,6 +1,9 @@
 package com.jmatch.services;
 
+import com.jmatch.models.Project;
 import com.jmatch.models.Response;
+import com.jmatch.models.User;
+
 import org.springframework.lang.NonNull;
 
 import java.util.List;
