@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class JmatchServerApplication {
 
     public static void main(String[] args) {
-        EmailSender.init();
+        //EmailSender.init();
         SpringApplication.run(JmatchServerApplication.class, args);
     }
 

@@ -24,6 +24,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-json'
     implementation 'org.mindrot:jbcrypt:0.4'
     implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+    runtimeOnly 'org.postgresql:postgresql'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    implementation 'org.springframework.boot:spring-boot-starter-security'
 //    testImplementation 'org.springframework.security:spring-security-test'
