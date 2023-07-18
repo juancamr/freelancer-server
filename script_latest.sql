@@ -26,7 +26,7 @@ CREATE TABLE
     if NOT EXISTS freelancer (
         id INT PRIMARY key NOT NULL AUTO_INCREMENT,
         username varchar(30) not null,
-        id_categoria INT NOT NULL,
+        id_categoria INT,
         nombre VARCHAR(50) NOT NULL,
         apellido VARCHAR(50) NOT NULL,
         foto VARCHAR(200),

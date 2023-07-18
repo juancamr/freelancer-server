@@ -3,32 +3,26 @@ package com.jmatch.controllers;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jmatch.models.Freelancer;
 import com.jmatch.models.Response;
-import com.jmatch.models.User;
 import com.jmatch.requestModel.LoginRequest;
 import com.jmatch.requestModel.RegisterRequest;
 import com.jmatch.requestModel.UpdateProfileRequest;
 import com.jmatch.services.FreelancerService;
-import com.jmatch.services.UserService;
 import com.jmatch.utils.Const;
 import com.jmatch.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/freelancer")
+public class FreelancerController extends BaseController {
 
-public class UserController extends BaseController {
-
-    private final UserService userService;
     private final FreelancerService freelancerService;
 
     @Autowired
-    public UserController(UserService userService, FreelancerService freelancerService) {
-        this.userService = userService;
+    public FreelancerController(FreelancerService freelancerService) {
         this.freelancerService = freelancerService;
     }
 
@@ -36,8 +30,8 @@ public class UserController extends BaseController {
     public ResponseEntity<ObjectNode> register(@RequestBody RegisterRequest registerRequest) {
         if (Utils.checkRequestParams(registerRequest)) {
             if (Utils.isValidEmail(registerRequest.getCorreo())) {
-                Response<User> res = userService.registerService(registerRequest);
-                if (res.isSuccess()) return created(successJson().putPOJO("user", res.getData()));
+                Response<Freelancer> res = freelancerService.registerService(registerRequest);
+                if (res.isSuccess()) return created(successJson().putPOJO("freelancer", res.getData()));
                 else return unprocessable(res.getError());
             } else return badRequest(Const.Errors.INVALID_EMAIL);
         } else return insuficientParams();
@@ -48,22 +42,27 @@ public class UserController extends BaseController {
         if (Utils.checkRequestParams(loginRequest)) {
             String username = loginRequest.getUsername();
             String password = loginRequest.getPassword();
-            Response<User> res = userService.loginService(username, password);
-            if (res.isSuccess()) return res(successJson().putPOJO("user", res.getData()));
+            Response<Freelancer> res = freelancerService.loginService(username, password);
+            if (res.isSuccess()) return res(successJson().putPOJO("freelancer", res.getData()));
             else return unprocessable(res.getError());
         } else return insuficientParams();
     }
 
-    @GetMapping("/freelancers")
-    public ResponseEntity<?> getAllFreelancers() {
-        Response<Freelancer> res = freelancerService.getAllForUsers();
-        return res(successJson().putPOJO("freelancer_list", res.getDataList()));
+    @PatchMapping("/set_category")
+    public ResponseEntity<?> assignCategory(@RequestBody Map<String, Integer> requestBody) {
+        int idFreelancer = requestBody.get("id_freelancer");
+        int idCategoria = requestBody.get("id_categoria");
+        if (idFreelancer != 0 && idCategoria != 0) {
+            Response<Freelancer> res = freelancerService.assignCategory(idFreelancer, idCategoria);
+            if (res.isSuccess()) return res(successJson());
+            else return unprocessable(res.getError());
+        } else return insuficientParams();
     }
 
     @PutMapping("/update")
     public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest updateProfileRequest) {
         if (Utils.checkRequestParams(updateProfileRequest)) {
-            Response<User> res = userService.updateFreelancerProfile(updateProfileRequest);
+            Response<Freelancer> res = freelancerService.updateFreelancerProfile(updateProfileRequest);
             if (res.isSuccess()) return res(successJson());
             else return unprocessable(res.getError());
         } else return insuficientParams();
@@ -74,7 +73,7 @@ public class UserController extends BaseController {
         String password = requestBody.get("password");
         int id = Integer.parseInt(requestBody.get("id"));
         if (password.length() < 10 && id != 0) return badRequest("Contrasenia invalida, minimo 10 caracteres");
-        else return res(json().put("success", userService.isTheirPassword(password, id)));
+        else return res(json().put("success", freelancerService.isTheirPassword(password, id)));
     }
 
     @PatchMapping("/change_password")
@@ -83,7 +82,7 @@ public class UserController extends BaseController {
         int id = Integer.parseInt(requestBody.get("id"));
         if (password.length() < 10 && id != 0) return badRequest("Contrasenia invalida, minimo 10 caracteres");
         else {
-            Response<User> res = userService.changePassword(password, id);
+            Response<Freelancer> res = freelancerService.changePassword(password, id);
             if (res.isSuccess()) return res(successJson());
             else return unprocessable(res.getError());
         }

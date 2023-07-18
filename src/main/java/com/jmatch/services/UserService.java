@@ -5,10 +5,12 @@ import com.jmatch.models.Response;
 import com.jmatch.models.User;
 import com.jmatch.repositories.UserRepository;
 import com.jmatch.requestModel.RegisterRequest;
+import com.jmatch.requestModel.UpdateProfileRequest;
 import com.jmatch.utils.Const;
 import com.jmatch.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @Service
@@ -24,14 +26,10 @@ public class UserService extends BaseService<User> {
     public Response<User> loginService(String username, String password) {
         Optional<User> userFound = userRepository.findByUsername(username);
         if (userFound.isPresent()) {
-            UserRelated user = userFound.get();
-            if (Utils.comparePassword(password, user.getPasswd()))
-                return res(true, user);
-            else
-                return res(false, Const.Errors.INCORRECT_PASSWORD);
-        } else {
-            return res(false, Const.Errors.USER_NOT_FOUND);
-        }
+            if (Utils.comparePassword(password, userFound.get().getPasswd()))
+                return res(true, userFound.get());
+            else return res(false, Const.Errors.INCORRECT_PASSWORD);
+        } else return res(false, Const.Errors.USER_NOT_FOUND);
     }
 
     public Response<User> registerService(RegisterRequest data) {
@@ -57,5 +55,33 @@ public class UserService extends BaseService<User> {
                 }
             }
         }
+    }
+
+    public Response<User> updateFreelancerProfile(UpdateProfileRequest updateProfileRequest) {
+        long id = updateProfileRequest.getId();
+        Optional<User> userFound = userRepository.findById(id);
+        if (userFound.isPresent()) {
+            User savedUser = userRepository.save(userFound.get());
+            if (savedUser.getId() != 0) return res(true);
+            else return res(false, Const.Errors.SOMETHING_WENT_WRONG);
+        } else return res(false, Const.Errors.USER_NOT_FOUND);
+    }
+
+    public boolean isTheirPassword(String password, int idUser) {
+        Optional<User> userFound = userRepository.findById((long) idUser);
+        return userFound.map(user ->
+                        Utils.comparePassword(password, userFound.get().getPasswd()))
+                .orElseGet(() -> false);
+    }
+
+    public Response<User> changePassword(String password, int idUser) {
+        Optional<User> userFound = userRepository.findById((long) idUser);
+        if (userFound.isPresent()) {
+            User user = userFound.get();
+            user.setPasswd(Utils.encryptPassword(password));
+            userRepository.save(user);
+            return res(true);
+        } else return res(false, Const.Errors.USER_NOT_FOUND);
+
     }
 }

@@ -7,7 +7,8 @@ import java.util.List;
 
 public class BaseService<T> {
 
-    public <S> Response<T> res(@NonNull S... values) {
+    @SafeVarargs
+    public final <S> Response<T> res(@NonNull S... values) {
         boolean success = false;
         String message = null;
         List<T> dataList = null;
