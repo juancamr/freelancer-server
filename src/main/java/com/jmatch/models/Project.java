@@ -11,6 +11,9 @@ public class Project implements ProjectRelated {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
+  @ManyToOne(fetch=FetchType.EAGER)
+  @JoinColumn(name="portfolio")
+  private Portfolio portfolio;
   private String projectname;
   protected String image;
 

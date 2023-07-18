@@ -28,6 +28,11 @@ public class FreelancerService extends BaseService<Freelancer> {
         this.categoriaRepository = categoriaRepository;
     }
 
+    public Response<Freelancer> getFreelancerById(int id) {
+        Optional<Freelancer> freelancerFound = freelancerRepository.findById((long) id);
+        return freelancerFound.map(freelancer -> res(true, freelancer)).orElseGet(() -> res(false, "No se pudo obtener el freelancer"));
+    }
+
     public Response<Freelancer> loginService(String username, String password) {
         Optional<Freelancer> freelancerFound = freelancerRepository.findByUsername(username);
         if (freelancerFound.isPresent()) {
