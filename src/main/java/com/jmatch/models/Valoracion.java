@@ -10,10 +10,10 @@ public class Valoracion {
     private int id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "freelancer")
+    @JoinColumn(name = "id_freelancer")
     private Freelancer freelancer;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "usuario")
+    @JoinColumn(name = "id_usuario")
     private User usuario;
     private int rateStars;
     private String comentario;

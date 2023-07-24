@@ -1,6 +1,8 @@
 package com.jmatch.services;
 
+import com.jmatch.models.Freelancer;
 import com.jmatch.models.Response;
+import com.jmatch.models.User;
 import com.jmatch.models.Valoracion;
 import com.jmatch.repositories.ValoracionRepository;
 import com.jmatch.requestModel.CrearValoracionRequest;
@@ -20,10 +22,10 @@ public class ValoracionService extends BaseService<Valoracion> {
         this.valoracionRepository = valoracionRepository;
     }
 
-    public Response<Valoracion> crearValoracion(CrearValoracionRequest crearValoracionRequest) {
+    public Response<Valoracion> crearValoracion(CrearValoracionRequest crearValoracionRequest, Freelancer freelancer, User usuario) {
         Valoracion savedValoracion = valoracionRepository.save(new Valoracion.Builder()
-                .freelancer(crearValoracionRequest.getFreelancer())
-                .usuario(crearValoracionRequest.getUsuario())
+                .freelancer(freelancer)
+                .usuario(usuario)
                 .comentario(crearValoracionRequest.getComentario())
                 .rateStars(crearValoracionRequest.getRateStars())
                 .build()

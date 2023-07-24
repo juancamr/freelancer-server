@@ -4,45 +4,41 @@ import com.jmatch.models.Freelancer;
 import com.jmatch.models.User;
 
 public class CrearValoracionRequest {
-    Freelancer freelancer;
-    User usuario;
+    int idFreelancer;
+    int idUsuario;
 
     int rateStars;
     String comentario;
 
-    public Freelancer getFreelancer() {
-        return freelancer;
+    public int getIdFreelancer() {
+        return idFreelancer;
     }
 
-    public CrearValoracionRequest setFreelancer(Freelancer freelancer) {
-        this.freelancer = freelancer;
-        return this;
+    public void setIdFreelancer(int idFreelancer) {
+        this.idFreelancer = idFreelancer;
     }
 
-    public User getUsuario() {
-        return usuario;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public CrearValoracionRequest setUsuario(User usuario) {
-        this.usuario = usuario;
-        return this;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public int getRateStars() {
         return rateStars;
     }
 
-    public CrearValoracionRequest setRateStars(int rateStars) {
+    public void setRateStars(int rateStars) {
         this.rateStars = rateStars;
-        return this;
     }
 
     public String getComentario() {
         return comentario;
     }
 
-    public CrearValoracionRequest setComentario(String comentario) {
+    public void setComentario(String comentario) {
         this.comentario = comentario;
-        return this;
     }
 }

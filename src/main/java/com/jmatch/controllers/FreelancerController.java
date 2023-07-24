@@ -50,13 +50,17 @@ public class FreelancerController extends BaseController {
 
     @PatchMapping("/set_category")
     public ResponseEntity<?> assignCategory(@RequestBody Map<String, Integer> requestBody) {
-        int idFreelancer = requestBody.get("id_freelancer");
-        int idCategoria = requestBody.get("id_categoria");
-        if (idFreelancer != 0 && idCategoria != 0) {
-            Response<Freelancer> res = freelancerService.assignCategory(idFreelancer, idCategoria);
-            if (res.isSuccess()) return res(successJson());
-            else return unprocessable(res.getError());
-        } else return insuficientParams();
+        int idFreelancer;
+        int idCategoria;
+        try {
+            idFreelancer = Integer.parseInt(requestBody.get("id_freelancer").toString());
+            idCategoria = Integer.parseInt(requestBody.get("id_categoria").toString());
+        } catch (Exception e) {
+            return insuficientParams();
+        }
+        Response<Freelancer> res = freelancerService.assignCategory(idFreelancer, idCategoria);
+        if (res.isSuccess()) return res(successJson());
+        else return unprocessable(res.getError());
     }
 
     @PutMapping("/update")

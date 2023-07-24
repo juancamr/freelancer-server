@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/admin/")
+@RequestMapping("/api/admin/categoria")
 public class CategoriaController extends BaseController {
     private final CategoriaService categoriaService;
 
@@ -21,7 +21,7 @@ public class CategoriaController extends BaseController {
         this.categoriaService = categoriaService;
     }
 
-    @PostMapping("/categoria")
+    @PostMapping("/")
     public ResponseEntity<ObjectNode> createCategory(@RequestBody CreateCategoryRequest createCategoryRequest) {
         if (Utils.checkRequestParams(createCategoryRequest)) {
             String nombre = createCategoryRequest.getNombre();
@@ -32,7 +32,7 @@ public class CategoriaController extends BaseController {
         } else return insuficientParams();
     }
 
-    @PutMapping("/categoria")
+    @PutMapping("/")
     public ResponseEntity<ObjectNode> updateCategory(@RequestBody UpdateCategoryRequest updateCategoryRequest) {
         if (Utils.checkRequestParams(updateCategoryRequest)) {
             int id = updateCategoryRequest.getId();
@@ -44,13 +44,13 @@ public class CategoriaController extends BaseController {
         } else return insuficientParams();
     }
 
-    @GetMapping("/categoria")
+    @GetMapping("/")
     public ResponseEntity<?> getAllCategorys() {
         Response<Categoria> res = categoriaService.findAll();
         return res(successJson().putPOJO("categoria", res.getDataList()));
     }
 
-    @GetMapping("/categoria/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ObjectNode> getCategory(@PathVariable("id") int id) {
         if (id != 0) {
             Response<Categoria> res = categoriaService.findOne(id);
@@ -59,7 +59,7 @@ public class CategoriaController extends BaseController {
         } else return insuficientParams();
     }
 
-    @DeleteMapping("/categoria/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable("id") int id) {
         if (id != 0) {
             Response<Categoria> res = categoriaService.removeCategory(id);

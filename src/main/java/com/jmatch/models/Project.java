@@ -7,78 +7,79 @@ import jakarta.persistence.*;
 @Table(name = "proyecto")
 public class Project implements ProjectRelated {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
-
-  @ManyToOne(fetch=FetchType.EAGER)
-  @JoinColumn(name="portfolio")
-  private Portfolio portfolio;
-  private String projectname;
-  protected String image;
-
-  public Project() {}
-
-  private Project(Builder builder) {
-    this.id = builder.id;
-    this.projectname = builder.projectname;
-    this.image = builder.image;
-  }
-
-  public static class Builder {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String projectname;
-    private String image;
 
-    public Builder() {
-      // Inicialización de valores predeterminados si es necesario
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_portfolio")
+    private Portfolio portfolio;
+    private String nombre;
+    protected String image_path;
+
+    public Project() {
     }
 
-    public Builder id(int id) {
-      this.id = id;
-      return this;
+    private Project(Builder builder) {
+        this.id = builder.id;
+        this.nombre = builder.nombre;
+        this.image_path = builder.image_path;
     }
 
-    public Builder projectname(String projectname) {
-      this.projectname = projectname;
-      return this;
+    public static class Builder {
+        private int id;
+        private String nombre;
+        private String image_path;
+
+        public Builder() {
+            // Inicialización de valores predeterminados si es necesario
+        }
+
+        public Builder id(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder projectname(String projectname) {
+            this.nombre = projectname;
+            return this;
+        }
+
+        public Builder image(String image) {
+            this.image_path = image;
+            return this;
+        }
+
+        public Project build() {
+            return new Project(this);
+        }
     }
 
-    public Builder image(String image) {
-      this.image = image;
-      return this;
+    public int getId() {
+        return id;
     }
 
-    public Project build() {
-      return new Project(this);
+    public void setId(int id) {
+        this.id = id;
     }
-  }
 
-  public int getId() {
-    return id;
-  }
+    @Override
+    public String getProjectname() {
+        return nombre;
+    }
 
-  public void setId(int id) {
-    this.id = id;
-  }
+    @Override
+    public String getImage() {
+        return image_path;
+    }
 
-  @Override
-  public String getProjectname() {
-    return projectname;
-  }
+    @Override
+    public void setProjectname(String projectname) {
+        this.nombre = projectname;
+    }
 
-  @Override
-  public String getImage() {
-    return image;
-  }
-
-  @Override
-  public void setProjectname(String projectname) {
-    this.projectname = projectname;
-  }
-
-  @Override
-  public void setImage(String image) {
-    this.image = image;
-  }
+    @Override
+    public void setImage(String image) {
+        this.image_path = image;
+    }
 }

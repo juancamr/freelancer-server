@@ -41,9 +41,9 @@ CREATE TABLE
 CREATE TABLE
     if NOT EXISTS portfolio (
         id INT PRIMARY key NOT NULL AUTO_INCREMENT,
-        id_freelancer INT NOT NULL,
+        freelancer INT NOT NULL,
         descripcion text,
-        CONSTRAINT FOREIGN key (id_freelancer) REFERENCES freelancer (id)
+        CONSTRAINT FOREIGN key (freelancer) REFERENCES freelancer (id)
     ) ENGINE = INNODB;
 
 CREATE TABLE

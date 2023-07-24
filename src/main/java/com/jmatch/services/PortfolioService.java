@@ -20,11 +20,11 @@ public class PortfolioService extends BaseService<Portfolio> {
 
     public Response<Portfolio> crearPortfolio(Freelancer freelancer, String descripcion) {
         Portfolio portfolio = new Portfolio();
-        portfolio.setPortfolio(portfolio);
+        portfolio.setFreelancer(freelancer);
         portfolio.setDescripcion(descripcion);
         Portfolio savedPortfolio = portfolioRepository.save(portfolio);
 
-        if (savedPortfolio.getDescripcion().isEmpty())
+        if (savedPortfolio.getId() >= 0)
             return res(true, savedPortfolio);
         else return res(false, "No se pudo agregar el portafolio");
     }

@@ -16,29 +16,34 @@ public class PortfolioController extends BaseController {
 
     PortfolioService portfolioService;
     FreelancerService freelancerService;
+
     public PortfolioController(PortfolioService portfolioService, FreelancerService freelancerService) {
         this.portfolioService = portfolioService;
         this.freelancerService = freelancerService;
     }
+
     @PostMapping("/create")
     ResponseEntity<?> createPortfolio(@RequestBody Map<String, Object> requestBody) {
-        int idFreelancer = Integer.parseInt(requestBody.get("freelancer").toString());
-        String descripcion = requestBody.get("descripcion").toString();
+        int idFreelancer;
+        String descripcion;
+        try {
+            idFreelancer = Integer.parseInt(requestBody.get("id_freelancer").toString());
+            descripcion = requestBody.get("descripcion").toString();
+        } catch (Exception e) {
+            return insuficientParams();
+        }
         Response<Freelancer> resFreelancer = freelancerService.getFreelancer(idFreelancer);
         if (resFreelancer.isSuccess()) {
-            if (idFreelancer != 0 && !descripcion.isEmpty()) {
-                Response<Portfolio> res = portfolioService.crearPortfolio(resFreelancer.getData(), descripcion);
-                if (res.isSuccess()) return created(successJson().putPOJO("portfolio", res.getData()));
-                else return unprocessable(res.getError());
-            } else return insuficientParams();
+            Response<Portfolio> res = portfolioService.crearPortfolio(resFreelancer.getData(), descripcion);
+            if (res.isSuccess()) return created(successJson().putPOJO("portfolio", res.getData()));
+            else return unprocessable(res.getError());
         } else return badRequest(resFreelancer.getError());
     }
 
-    @GetMapping("/get")
-    ResponseEntity<?> getPortfolio(@RequestBody Map<String, Integer> requestBody) {
-        int idFreelancer = requestBody.get("id");
-        if (idFreelancer != 0) {
-            Response<Portfolio> res = portfolioService.getPortfolio(idFreelancer);
+    @GetMapping("/{id}")
+    ResponseEntity<?> getPortfolio(@PathVariable("id") int id) {
+        if (id != 0) {
+            Response<Portfolio> res = portfolioService.getPortfolio(id);
             if (res.isSuccess()) return res(successJson().putPOJO("portfolio", res.getData()));
             else return unprocessable(res.getError());
         } else return insuficientParams();

@@ -51,7 +51,13 @@ public class FreelancerService extends BaseService<Freelancer> {
             if (freelancerFoundByEmail.isPresent()) {
                 return res(false, Const.Errors.EMAIL_ALREADY_USED);
             } else {
-                UserRelated savedFreelancer = freelancerRepository.save(new Freelancer.Builder().username(registerRequest.getUsername()).nombre((registerRequest.getNombres())).apellido(registerRequest.getApellidos()).correo(registerRequest.getCorreo()).passwd(Utils.encryptPassword(registerRequest.getPassword())).build());
+                UserRelated savedFreelancer = freelancerRepository.save(new Freelancer.Builder()
+                        .username(registerRequest.getUsername())
+                        .nombre((registerRequest.getNombres()))
+                        .apellido(registerRequest.getApellidos())
+                        .correo(registerRequest.getCorreo())
+                        .passwd(Utils.encryptPassword(registerRequest.getPassword()))
+                        .build());
                 if (savedFreelancer.getUsername().isEmpty()) return res(false, Const.Errors.SOMETHING_WENT_WRONG);
                 else return res(true, savedFreelancer);
             }
@@ -81,7 +87,7 @@ public class FreelancerService extends BaseService<Freelancer> {
 
     public Response<Freelancer> getFreelancer(int id) {
         Optional<Freelancer> freelancerFound = freelancerRepository.findById((long) id);
-        return freelancerFound.map(freelancer -> res(true, freelancer)).orElseGet(() -> res(false));
+        return freelancerFound.map(freelancer -> res(true, freelancer)).orElseGet(() -> res(false, "El freelancer no existe"));
     }
 
     public Response<Freelancer> updateFreelancerProfile(UpdateProfileRequest updateProfileRequest) {
@@ -96,9 +102,7 @@ public class FreelancerService extends BaseService<Freelancer> {
 
     public boolean isTheirPassword(String password, int idFreelancer) {
         Optional<Freelancer> freelancerFound = freelancerRepository.findById((long) idFreelancer);
-        return freelancerFound.map(freelancer ->
-                        Utils.comparePassword(password, freelancerFound.get().getPasswd()))
-                .orElseGet(() -> false);
+        return freelancerFound.map(freelancer -> Utils.comparePassword(password, freelancerFound.get().getPasswd())).orElseGet(() -> false);
     }
 
     public Response<Freelancer> changePassword(String password, int idFreelancer) {

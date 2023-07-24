@@ -58,6 +58,12 @@ public class UserService extends BaseService<User> {
         }
     }
 
+    public Response<User> getUserService(int id) {
+        Optional<User> userFound = userRepository.findById((long) id);
+        return userFound.map(user -> res(true, user))
+                .orElseGet(() -> res(false, "No se pudo obtener el usuario"));
+    }
+
     public Response<User> updateFreelancerProfile(UpdateProfileRequest updateProfileRequest) {
         long id = updateProfileRequest.getId();
         Optional<User> userFound = userRepository.findById(id);

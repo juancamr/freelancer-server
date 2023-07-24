@@ -3,49 +3,48 @@ package com.jmatch.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="portfolio")
+@Table(name = "portfolio")
 public class Portfolio {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="portfolio")
-    private Portfolio portfolio;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "freelancer")
+    private Freelancer freelancer;
 
     private String descripcion;
 
-    public Portfolio(Portfolio portfolio, String descripcion) {
+    public Portfolio(Freelancer freelancer, String descripcion) {
         this.descripcion = descripcion;
-        this.portfolio = portfolio;
+        this.freelancer = freelancer;
     }
-    public Portfolio() {}
+
+    public Portfolio() {
+    }
 
     public int getId() {
         return id;
     }
 
-    public Portfolio setId(int id) {
+    public void setId(int id) {
         this.id = id;
-        return this;
     }
 
-    public Portfolio getPortfolio() {
-        return portfolio;
+    public Freelancer getFreelancer() {
+        return freelancer;
     }
 
-    public Portfolio setPortfolio(Portfolio portfolio) {
-        this.portfolio = portfolio;
-        return this;
+    public void setFreelancer(Freelancer freelancer) {
+        this.freelancer = freelancer;
     }
 
     public String getDescripcion() {
         return descripcion;
     }
 
-    public Portfolio setDescripcion(String descripcion) {
+    public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-        return this;
     }
 }

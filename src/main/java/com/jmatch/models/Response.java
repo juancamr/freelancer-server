@@ -5,7 +5,7 @@ import java.util.List;
 public class Response<T> {
 
     private boolean success;
-    private String message;
+    private String error;
     private T data;
     private List<T> dataList;
 
@@ -35,7 +35,7 @@ public class Response<T> {
 
     public Response(boolean success, String message, T data, List<T> dataList) {
         this.success = success;
-        this.message = message;
+        this.error = message;
         this.data = data;
         this.dataList = dataList;
     }
@@ -45,7 +45,7 @@ public class Response<T> {
     }
 
     public String getError() {
-        return message;
+        return error;
     }
 
     public T getData() {
